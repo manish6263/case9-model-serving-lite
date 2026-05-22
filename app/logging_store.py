@@ -1,7 +1,7 @@
 import hashlib
 import json
 from collections.abc import Iterable
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from threading import Lock
 from typing import Any
@@ -39,7 +39,7 @@ def log_prediction(
     initialize_log_store(log_path)
     entry = {
         "request_id": request_id,
-        "created_at": datetime.now(UTC).isoformat(),
+        "created_at": datetime.now(timezone.utc).isoformat(),
         "text_hash": hash_text(text),
         "text_preview": preview_text(text),
         "label": label,
