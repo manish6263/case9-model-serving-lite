@@ -68,6 +68,16 @@ pip install -r requirements-hf.txt
 
 ## Example API Call
 
+WSL / bash:
+
+```bash
+curl -X POST http://localhost:8000/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text":"I loved this excellent product"}'
+```
+
+PowerShell:
+
 ```bash
 curl -X POST http://localhost:8000/predict ^
   -H "Content-Type: application/json" ^
