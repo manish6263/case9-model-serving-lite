@@ -13,7 +13,7 @@ This project wraps a sentiment-classification model in a FastAPI service and add
 
 - FastAPI app scaffolded.
 - `/health` endpoint added.
-- `/predict` endpoint added with a deterministic fallback sentiment model.
+- `/predict` endpoint added with Hugging Face DistilBERT loading and deterministic fallback.
 - `/logs/recent` endpoint added for privacy-aware request/response debugging.
 - `/monitoring/summary` endpoint added for drift-monitoring signals.
 - Initial tests added.
@@ -33,6 +33,12 @@ By default, prediction logs are written to `logs/predictions.jsonl`. To override
 
 ```bash
 set CASE9_LOG_PATH=artifacts\local-predictions.jsonl
+```
+
+To force the deterministic fallback model during local debugging or tests:
+
+```bash
+set CASE9_DISABLE_HF=1
 ```
 
 ## Example API Call
@@ -70,13 +76,13 @@ pytest
 ## Stack
 
 - FastAPI: typed API service with automatic docs.
+- Hugging Face Transformers: pretrained DistilBERT sentiment model.
 - JSONL logs: local request/response log store for demo-friendly debugging.
 - Drift checks: text length, label distribution, language/script ratio, and vocabulary novelty.
 - pytest: contract tests for the service.
-- A deterministic fallback model provides a stable API contract before adding Hugging Face model loading.
+- A deterministic fallback model keeps the service usable if model loading fails on a free-tier host.
 - Docker, GitHub Actions, and model tooling will be added in later commits.
 
 ## What's Not Done
 
-- Hugging Face model wrapper.
 - Retrain/evaluation CI gate.

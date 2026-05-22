@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from app.config import get_log_path
 from app.drift import summarize_drift
 from app.logging_store import fetch_recent_logs, initialize_log_store, log_prediction
-from app.model import MODEL_VERSION, predict_sentiment
+from app.model import get_model_version, predict_sentiment
 from app.schemas import DriftSummary, PredictRequest, PredictResponse, PredictionLogEntry
 
 
@@ -44,7 +44,7 @@ def predict(request: PredictRequest) -> PredictResponse:
         text=request.text,
         label=label,
         score=rounded_score,
-        model_version=MODEL_VERSION,
+        model_version=get_model_version(),
         latency_ms=latency_ms,
     )
 
@@ -52,7 +52,7 @@ def predict(request: PredictRequest) -> PredictResponse:
         request_id=request_id,
         label=label,
         score=rounded_score,
-        model_version=MODEL_VERSION,
+        model_version=get_model_version(),
         latency_ms=latency_ms,
     )
 

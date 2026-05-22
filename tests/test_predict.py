@@ -4,9 +4,11 @@ from pathlib import Path
 os.environ["CASE9_LOG_PATH"] = str(
     Path("artifacts/test-logs/api.jsonl")
 )
+os.environ["CASE9_DISABLE_HF"] = "1"
 
 from fastapi.testclient import TestClient
 
+from app import model
 from app.main import app
 
 

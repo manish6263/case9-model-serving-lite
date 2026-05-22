@@ -10,6 +10,8 @@ This service will track three kinds of signals:
 
 When a signal crosses a threshold, the response should be to inspect recent logs, compare against the baseline distribution, rollback if needed, and retrain only after the failure mode is understood.
 
+If the Hugging Face model cannot load, the service falls back to a deterministic rule-based classifier. That is not meant to be equally accurate; it keeps the API alive and makes the degraded state visible through `model_version`.
+
 ## Current Drift Signals
 
 - Text length drift: recent inputs are much longer than the reference baseline.
