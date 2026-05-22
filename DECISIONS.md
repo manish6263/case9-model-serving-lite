@@ -4,6 +4,8 @@
 
 1. The production app needs a simple HTTP API first because the brief asks for a live `/predict` endpoint.
 2. The first version should optimize for observability and evaluation over model novelty because the case tests operational nuance.
+3. Free-tier deployment reliability matters more than loading the heaviest possible model in the live demo.
+4. The retraining workflow can use a lightweight candidate model as long as the promotion gate is explicit, reproducible, and easy to inspect.
 
 ## Trade-offs
 
@@ -26,8 +28,18 @@
 
 ## What I De-scoped And Why
 
-- Full Hugging Face model loading in the first prediction commit - keeping this step focused on API contract, validation, and tests.
+- Always-on Hugging Face in the default container - PyTorch made free-tier builds slow, so the default deployment uses fallback mode while keeping an optional Hugging Face image.
+- Full model registry - replaced with a transparent JSON candidate model plus metrics gate to keep the case study focused and demoable.
+- Real alerting integration - documented in the playbook, but not wired to Slack/PagerDuty because the brief only requires a working monitored service and demo.
+- Raw text retention - avoided because sentiment inputs can contain PII.
 
 ## What I'd Do Differently With Another Day
 
-- Add a real model registry and canary rollout instead of a lightweight promotion gate.
+- Add a model registry and canary rollout.
+- Add shadow traffic evaluation for candidate models.
+- Add dashboard screenshots for latency, drift, and label distribution.
+- Add a larger, messier validation set with neutral/mixed sentiment examples.
+
+## AI Assistance Disclosure
+
+I used an AI coding assistant to help scaffold code, tests, and documentation. I reviewed the implementation choices and kept the project intentionally small enough to explain line by line.
