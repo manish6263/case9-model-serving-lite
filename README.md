@@ -102,7 +102,8 @@ pytest
 - pytest: contract tests for the service.
 - A deterministic fallback model keeps the service usable if model loading fails on a free-tier host.
 - Docker: containerized API for Render or any container host.
-- GitHub Actions and model tooling will be added in later commits.
+- GitHub Actions: tests and Docker build run on push and pull request.
+- Model retraining workflow will be added in a later commit.
 
 ## What's Not Done
 
