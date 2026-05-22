@@ -1,0 +1,7 @@
+text,label
+"good product and great delivery",POSITIVE
+"excellent support and happy customer",POSITIVE
+"perfect order and amazing service",POSITIVE
+"bad support and terrible delivery",NEGATIVE
+"broken product and poor service",NEGATIVE
+"worst refund experience",NEGATIVE

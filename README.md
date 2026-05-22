@@ -87,6 +87,22 @@ Drift simulation:
 python scripts/simulate_drift.py
 ```
 
+Retrain and evaluation gate:
+
+```bash
+python training/train.py
+python training/evaluate.py
+python training/promote_if_better.py
+```
+
+To demo an auto-rejected regressed model:
+
+```bash
+python training/make_bad_candidate.py
+python training/evaluate.py
+python training/promote_if_better.py
+```
+
 ## How To Test
 
 ```bash
@@ -103,8 +119,8 @@ pytest
 - A deterministic fallback model keeps the service usable if model loading fails on a free-tier host.
 - Docker: containerized API for Render or any container host.
 - GitHub Actions: tests and Docker build run on push and pull request.
-- Model retraining workflow will be added in a later commit.
+- Training gate: retrains a lightweight candidate model, evaluates held-out F1, and rejects metric regression.
 
 ## What's Not Done
 
-- Retrain/evaluation CI gate.
+- Live deployment URL is still pending.

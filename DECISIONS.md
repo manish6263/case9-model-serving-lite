@@ -19,6 +19,7 @@
 | Optional Hugging Face Docker layer | Always install PyTorch in the base image | PyTorch makes free-tier builds slow and heavy, so the base image stays deployable while an `INSTALL_HF=true` image remains available. |
 | Python slim Docker image | Full CUDA image | The brief allows CPU free-tier compute, and a slim image is smaller and cheaper to deploy. |
 | CI tests fallback mode | CI loads DistilBERT every run | The CI goal is to catch API contract regressions quickly; full model loading is verified separately and can be enabled when needed. |
+| Lightweight keyword retraining gate | Expensive transformer fine-tuning in CI | The brief tests the promotion mechanism. A small reproducible model makes the pass/fail gate easy to inspect in a demo. |
 | Rule-based fallback first | Hugging Face model in the first API commit | The API contract can be tested before introducing model download/runtime risk. The fallback will remain useful if deployment cannot load the pretrained model. |
 | Small, incremental commits | One large final commit | The student pack says evaluators may inspect commit history, so steady progress is part of the submission story. |
 

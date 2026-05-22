@@ -37,3 +37,24 @@ jobs:
 
       - name: Build fallback image
         run: docker build -t case9-model-serving-lite .
+
+  training-gate:
+    name: Retrain Evaluation Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Train candidate model
+        run: python training/train.py
+
+      - name: Evaluate candidate model
+        run: python training/evaluate.py
+
+      - name: Promotion gate
+        run: python training/promote_if_better.py

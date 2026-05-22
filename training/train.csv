@@ -1,0 +1,13 @@
+text,label
+"excellent product and fast delivery",POSITIVE
+"great support and perfect service",POSITIVE
+"I love this order experience",POSITIVE
+"happy with the product quality",POSITIVE
+"best purchase and amazing service",POSITIVE
+"I recommend this product",POSITIVE
+"terrible support and slow refund",NEGATIVE
+"bad product and poor delivery",NEGATIVE
+"worst service and broken item",NEGATIVE
+"I hate this order experience",NEGATIVE
+"awful quality and disappointing support",NEGATIVE
+"refund was slow and service was bad",NEGATIVE

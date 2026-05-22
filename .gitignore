@@ -226,3 +226,5 @@ logs/
 artifacts/
 models/
 reports/
+training/candidate_model.json
+training/candidate_metrics.json

@@ -12,6 +12,10 @@ When a signal crosses a threshold, the response should be to inspect recent logs
 
 If the Hugging Face model cannot load, the service falls back to a deterministic rule-based classifier. That is not meant to be equally accurate; it keeps the API alive and makes the degraded state visible through `model_version`.
 
+## Model Update Gate
+
+Every candidate model must beat the production F1 tolerance on the held-out validation set before promotion. If the gate rejects a model, the next step is to inspect changed training data, class balance, and error examples before retraining again.
+
 ## Current Drift Signals
 
 - Text length drift: recent inputs are much longer than the reference baseline.
