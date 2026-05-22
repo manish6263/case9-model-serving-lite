@@ -40,6 +40,17 @@ def test_predict_writes_recent_log_entry() -> None:
     assert len(logs[0]["text_hash"]) == 64
 
 
+def test_monitoring_summary_returns_status() -> None:
+    client.post("/predict", json={"text": "This product is good"})
+
+    response = client.get("/monitoring/summary")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] in {"healthy", "drift_detected", "insufficient_data"}
+    assert body["total_requests"] >= 1
+
+
 def test_predict_rejects_empty_text() -> None:
     response = client.post("/predict", json={"text": ""})
 

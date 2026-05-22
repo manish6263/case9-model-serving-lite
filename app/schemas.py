@@ -24,3 +24,10 @@ class PredictionLogEntry(BaseModel):
     score: float = Field(..., ge=0.0, le=1.0)
     model_version: str
     latency_ms: int = Field(..., ge=0)
+
+
+class DriftSummary(BaseModel):
+    total_requests: int = Field(..., ge=0)
+    status: Literal["healthy", "drift_detected", "insufficient_data"]
+    flags: list[str]
+    metrics: dict

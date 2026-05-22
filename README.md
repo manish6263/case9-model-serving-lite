@@ -15,6 +15,7 @@ This project wraps a sentiment-classification model in a FastAPI service and add
 - `/health` endpoint added.
 - `/predict` endpoint added with a deterministic fallback sentiment model.
 - `/logs/recent` endpoint added for privacy-aware request/response debugging.
+- `/monitoring/summary` endpoint added for drift-monitoring signals.
 - Initial tests added.
 
 ## How To Run Locally
@@ -48,6 +49,18 @@ Recent prediction logs:
 curl http://localhost:8000/logs/recent
 ```
 
+Monitoring summary:
+
+```bash
+curl http://localhost:8000/monitoring/summary
+```
+
+Drift simulation:
+
+```bash
+python scripts/simulate_drift.py
+```
+
 ## How To Test
 
 ```bash
@@ -58,6 +71,7 @@ pytest
 
 - FastAPI: typed API service with automatic docs.
 - JSONL logs: local request/response log store for demo-friendly debugging.
+- Drift checks: text length, label distribution, language/script ratio, and vocabulary novelty.
 - pytest: contract tests for the service.
 - A deterministic fallback model provides a stable API contract before adding Hugging Face model loading.
 - Docker, GitHub Actions, and model tooling will be added in later commits.
@@ -65,5 +79,4 @@ pytest
 ## What's Not Done
 
 - Hugging Face model wrapper.
-- Drift simulation.
 - Retrain/evaluation CI gate.

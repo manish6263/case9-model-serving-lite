@@ -5,9 +5,10 @@ from uuid import uuid4
 from fastapi import FastAPI
 
 from app.config import get_log_path
+from app.drift import summarize_drift
 from app.logging_store import fetch_recent_logs, initialize_log_store, log_prediction
 from app.model import MODEL_VERSION, predict_sentiment
-from app.schemas import PredictRequest, PredictResponse, PredictionLogEntry
+from app.schemas import DriftSummary, PredictRequest, PredictResponse, PredictionLogEntry
 
 
 @asynccontextmanager
@@ -60,3 +61,10 @@ def predict(request: PredictRequest) -> PredictResponse:
 def recent_logs(limit: int = 20) -> list[dict[str, object]]:
     safe_limit = min(max(limit, 1), 100)
     return fetch_recent_logs(get_log_path(), limit=safe_limit)
+
+
+@app.get("/monitoring/summary", response_model=DriftSummary)
+def monitoring_summary(limit: int = 100) -> dict[str, object]:
+    safe_limit = min(max(limit, 1), 500)
+    logs = fetch_recent_logs(get_log_path(), limit=safe_limit)
+    return summarize_drift(logs)
