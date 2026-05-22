@@ -9,6 +9,7 @@ MAX_AVG_LENGTH_RATIO = 2.0
 MAX_POSITIVE_RATE_DELTA = 0.35
 MAX_NON_ASCII_RATE = 0.25
 MAX_VOCAB_NOVELTY_RATE = 0.55
+MIN_REQUESTS_FOR_DRIFT = 5
 
 REFERENCE_VOCAB = {
     "amazing",
@@ -71,6 +72,23 @@ def summarize_drift(logs: list[dict[str, Any]]) -> dict[str, Any]:
     avg_non_ascii_rate = sum(non_ascii_ratio(text) for text in previews) / len(previews)
     novelty_rate = vocab_novelty_rate(previews)
 
+    metrics = {
+        "avg_text_length": round(avg_length, 2),
+        "positive_rate": round(positive_rate, 4),
+        "avg_non_ascii_rate": round(avg_non_ascii_rate, 4),
+        "vocab_novelty_rate": round(novelty_rate, 4),
+        "label_counts": dict(label_counts),
+        "min_requests_for_drift": MIN_REQUESTS_FOR_DRIFT,
+    }
+
+    if len(logs) < MIN_REQUESTS_FOR_DRIFT:
+        return {
+            "total_requests": len(logs),
+            "status": "insufficient_data",
+            "flags": ["not_enough_requests"],
+            "metrics": metrics,
+        }
+
     flags = []
     if avg_length > REFERENCE_AVG_LENGTH * MAX_AVG_LENGTH_RATIO:
         flags.append("text_length_drift")
@@ -85,11 +103,5 @@ def summarize_drift(logs: list[dict[str, Any]]) -> dict[str, Any]:
         "total_requests": len(logs),
         "status": "drift_detected" if flags else "healthy",
         "flags": flags,
-        "metrics": {
-            "avg_text_length": round(avg_length, 2),
-            "positive_rate": round(positive_rate, 4),
-            "avg_non_ascii_rate": round(avg_non_ascii_rate, 4),
-            "vocab_novelty_rate": round(novelty_rate, 4),
-            "label_counts": dict(label_counts),
-        },
+        "metrics": metrics,
     }
