@@ -29,6 +29,15 @@ uvicorn app.main:app --reload
 
 Open `http://localhost:8000/docs`.
 
+## How To Run With Docker
+
+```bash
+docker build -t case9-model-serving-lite .
+docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite
+```
+
+Remove `-e CASE9_DISABLE_HF=1` when you want the container to load the Hugging Face model instead of the deterministic fallback.
+
 By default, prediction logs are written to `logs/predictions.jsonl`. To override this path:
 
 ```bash
@@ -81,7 +90,8 @@ pytest
 - Drift checks: text length, label distribution, language/script ratio, and vocabulary novelty.
 - pytest: contract tests for the service.
 - A deterministic fallback model keeps the service usable if model loading fails on a free-tier host.
-- Docker, GitHub Actions, and model tooling will be added in later commits.
+- Docker: containerized API for Render or any container host.
+- GitHub Actions and model tooling will be added in later commits.
 
 ## What's Not Done
 

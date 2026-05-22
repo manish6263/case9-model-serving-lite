@@ -16,6 +16,7 @@
 | Simple drift heuristics | Full production drift platform | The brief asks for a basic stub, so clear signals are more valuable than overbuilding infrastructure. |
 | DistilBERT SST-2 | Train a model from scratch | The brief asks to productionize a pretrained model; DistilBERT is small enough for CPU demos and familiar to evaluators. |
 | `CASE9_DISABLE_HF` fallback switch | Always load Hugging Face in every environment | Tests and constrained deployments should stay fast and predictable, while the normal app path still supports DistilBERT. |
+| Python slim Docker image | Full CUDA image | The brief allows CPU free-tier compute, and a slim image is smaller and cheaper to deploy. |
 | Rule-based fallback first | Hugging Face model in the first API commit | The API contract can be tested before introducing model download/runtime risk. The fallback will remain useful if deployment cannot load the pretrained model. |
 | Small, incremental commits | One large final commit | The student pack says evaluators may inspect commit history, so steady progress is part of the submission story. |
 
