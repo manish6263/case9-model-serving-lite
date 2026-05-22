@@ -216,3 +216,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Case 9 local runtime artifacts
+*.db
+*.sqlite
+*.sqlite3
+logs/
+artifacts/
+models/
+reports/
