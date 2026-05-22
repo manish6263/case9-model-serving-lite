@@ -10,11 +10,12 @@
 | Choice | Alternative | Why I Picked This |
 |---|---|---|
 | FastAPI | Flask | Built-in validation, typed schemas, and automatic API docs help make the service easier to test and demo. |
+| Rule-based fallback first | Hugging Face model in the first API commit | The API contract can be tested before introducing model download/runtime risk. The fallback will remain useful if deployment cannot load the pretrained model. |
 | Small, incremental commits | One large final commit | The student pack says evaluators may inspect commit history, so steady progress is part of the submission story. |
 
 ## What I De-scoped And Why
 
-- Full model loading in the first scaffold commit - keeping the initial commit focused on project structure and health checks.
+- Full Hugging Face model loading in the first prediction commit - keeping this step focused on API contract, validation, and tests.
 
 ## What I'd Do Differently With Another Day
 

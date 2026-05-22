@@ -13,7 +13,8 @@ This project wraps a sentiment-classification model in a FastAPI service and add
 
 - FastAPI app scaffolded.
 - `/health` endpoint added.
-- Initial test scaffold added.
+- `/predict` endpoint added with a deterministic fallback sentiment model.
+- Initial tests added.
 
 ## How To Run Locally
 
@@ -26,6 +27,14 @@ uvicorn app.main:app --reload
 
 Open `http://localhost:8000/docs`.
 
+## Example API Call
+
+```bash
+curl -X POST http://localhost:8000/predict ^
+  -H "Content-Type: application/json" ^
+  -d "{\"text\":\"I loved this excellent product\"}"
+```
+
 ## How To Test
 
 ```bash
@@ -36,11 +45,11 @@ pytest
 
 - FastAPI: typed API service with automatic docs.
 - pytest: contract tests for the service.
+- A deterministic fallback model provides a stable API contract before adding Hugging Face model loading.
 - Docker, GitHub Actions, and model tooling will be added in later commits.
 
 ## What's Not Done
 
-- `/predict` endpoint.
 - Hugging Face model wrapper.
 - Request/response logging.
 - Drift simulation.
