@@ -13,3 +13,14 @@ class PredictResponse(BaseModel):
     score: float = Field(..., ge=0.0, le=1.0)
     model_version: str
     latency_ms: int = Field(..., ge=0)
+
+
+class PredictionLogEntry(BaseModel):
+    request_id: str
+    created_at: str
+    text_hash: str
+    text_preview: str
+    label: Literal["POSITIVE", "NEGATIVE"]
+    score: float = Field(..., ge=0.0, le=1.0)
+    model_version: str
+    latency_ms: int = Field(..., ge=0)

@@ -1,3 +1,10 @@
+import os
+from pathlib import Path
+
+os.environ["CASE9_LOG_PATH"] = str(
+    Path("artifacts/test-logs/api.jsonl")
+)
+
 from fastapi.testclient import TestClient
 
 from app.main import app
@@ -16,6 +23,21 @@ def test_predict_returns_sentiment_contract() -> None:
     assert body["model_version"] == "rule-based-fallback-v0"
     assert isinstance(body["request_id"], str)
     assert isinstance(body["latency_ms"], int)
+
+
+def test_predict_writes_recent_log_entry() -> None:
+    response = client.post("/predict", json={"text": "This product is good"})
+
+    assert response.status_code == 200
+    request_id = response.json()["request_id"]
+
+    logs_response = client.get("/logs/recent?limit=1")
+
+    assert logs_response.status_code == 200
+    logs = logs_response.json()
+    assert logs[0]["request_id"] == request_id
+    assert logs[0]["text_preview"] == "This product is good"
+    assert len(logs[0]["text_hash"]) == 64
 
 
 def test_predict_rejects_empty_text() -> None:

@@ -1,16 +1,26 @@
+from contextlib import asynccontextmanager
 from time import perf_counter
 from uuid import uuid4
 
 from fastapi import FastAPI
 
+from app.config import get_log_path
+from app.logging_store import fetch_recent_logs, initialize_log_store, log_prediction
 from app.model import MODEL_VERSION, predict_sentiment
-from app.schemas import PredictRequest, PredictResponse
+from app.schemas import PredictRequest, PredictResponse, PredictionLogEntry
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    initialize_log_store(get_log_path())
+    yield
 
 
 app = FastAPI(
     title="Case 9 Model Serving Lite",
     description="A production-minded sentiment model service.",
     version="0.1.0",
+    lifespan=lifespan,
 )
 
 
@@ -24,11 +34,29 @@ def predict(request: PredictRequest) -> PredictResponse:
     started_at = perf_counter()
     label, score = predict_sentiment(request.text)
     latency_ms = int((perf_counter() - started_at) * 1000)
+    request_id = str(uuid4())
+    rounded_score = round(score, 4)
 
-    return PredictResponse(
-        request_id=str(uuid4()),
+    log_prediction(
+        get_log_path(),
+        request_id=request_id,
+        text=request.text,
         label=label,
-        score=round(score, 4),
+        score=rounded_score,
         model_version=MODEL_VERSION,
         latency_ms=latency_ms,
     )
+
+    return PredictResponse(
+        request_id=request_id,
+        label=label,
+        score=rounded_score,
+        model_version=MODEL_VERSION,
+        latency_ms=latency_ms,
+    )
+
+
+@app.get("/logs/recent", response_model=list[PredictionLogEntry])
+def recent_logs(limit: int = 20) -> list[dict[str, object]]:
+    safe_limit = min(max(limit, 1), 100)
+    return fetch_recent_logs(get_log_path(), limit=safe_limit)
