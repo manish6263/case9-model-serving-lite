@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: case9-model-serving-lite
+    env: docker
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: CASE9_DISABLE_HF
+        value: "1"
+      - key: CASE9_LOG_PATH
+        value: /tmp/case9-predictions.jsonl

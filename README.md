@@ -29,6 +29,8 @@ uvicorn app.main:app --reload
 
 Open `http://localhost:8000/docs`.
 
+For Render deployment, this repo includes `render.yaml`. The default deployment uses `CASE9_DISABLE_HF=1` so the free-tier container starts quickly and reliably; the model version in each response makes that degraded/fallback mode explicit.
+
 ## How To Run With Docker
 
 ```bash
@@ -87,6 +89,19 @@ Drift simulation:
 python scripts/simulate_drift.py
 ```
 
+Demo request sequence:
+
+```bash
+python scripts/demo_requests.py
+```
+
+For a deployed API:
+
+```bash
+set CASE9_BASE_URL=https://your-render-service.onrender.com
+python scripts/demo_requests.py
+```
+
 Retrain and evaluation gate:
 
 ```bash
@@ -118,6 +133,7 @@ pytest
 - pytest: contract tests for the service.
 - A deterministic fallback model keeps the service usable if model loading fails on a free-tier host.
 - Docker: containerized API for Render or any container host.
+- Render blueprint: `render.yaml` for free-tier API deployment.
 - GitHub Actions: tests and Docker build run on push and pull request.
 - Training gate: retrains a lightweight candidate model, evaluates held-out F1, and rejects metric regression.
 
