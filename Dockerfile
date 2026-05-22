@@ -6,8 +6,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+ARG INSTALL_HF=false
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
+
+COPY requirements-hf.txt .
+RUN if [ "$INSTALL_HF" = "true" ]; then pip install --no-cache-dir -r requirements-hf.txt; fi
 
 COPY app ./app
 

@@ -36,7 +36,12 @@ docker build -t case9-model-serving-lite .
 docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite
 ```
 
-Remove `-e CASE9_DISABLE_HF=1` when you want the container to load the Hugging Face model instead of the deterministic fallback.
+The default image uses the deterministic fallback so the container stays small and quick to deploy. To build an image that installs Hugging Face dependencies:
+
+```bash
+docker build --build-arg INSTALL_HF=true -t case9-model-serving-lite:hf .
+docker run -p 8000:8000 case9-model-serving-lite:hf
+```
 
 By default, prediction logs are written to `logs/predictions.jsonl`. To override this path:
 
@@ -48,6 +53,12 @@ To force the deterministic fallback model during local debugging or tests:
 
 ```bash
 set CASE9_DISABLE_HF=1
+```
+
+To install the optional Hugging Face dependencies locally:
+
+```bash
+pip install -r requirements-hf.txt
 ```
 
 ## Example API Call
