@@ -13,6 +13,8 @@ This project wraps a sentiment-classification model in a FastAPI service and add
 
 The product scenario is simple: a notebook sentiment model needs to become a service that another app can call on Monday. The goal is not only a prediction endpoint, but a service that can be debugged, monitored, and safely updated.
 
+![Live URL](docs/image.png)
+
 ## What Works
 
 - `GET /health`: service readiness.
