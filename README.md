@@ -22,6 +22,47 @@ The product scenario is simple: a notebook sentiment model needs to become a ser
 - Retrain/evaluation gate: trains a candidate model, evaluates held-out F1, and rejects regressions.
 - Docker image and Render blueprint for deployment.
 
+## Review The Live API
+
+Open the interactive API docs:
+
+```text
+https://case9-model-serving-lite.onrender.com/docs
+```
+
+Health check:
+
+```bash
+curl https://case9-model-serving-lite.onrender.com/health
+```
+
+Prediction:
+
+```bash
+curl -X POST https://case9-model-serving-lite.onrender.com/predict \
+  -H "Content-Type: application/json" \
+  -d '{"text":"I loved this excellent product"}'
+```
+
+Recent prediction logs:
+
+```bash
+curl https://case9-model-serving-lite.onrender.com/logs/recent
+```
+
+Monitoring summary:
+
+```bash
+curl https://case9-model-serving-lite.onrender.com/monitoring/summary
+```
+
+Deployed drift simulation:
+
+```bash
+export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
+python scripts/simulate_drift.py
+```
+
 ## How To Run Locally
 
 ```bash
@@ -68,7 +109,7 @@ To install the optional Hugging Face dependencies locally:
 pip install -r requirements-hf.txt
 ```
 
-## Example API Call
+## Local API Examples
 
 WSL / bash:
 
@@ -110,16 +151,10 @@ Monitoring summary:
 curl http://localhost:8000/monitoring/summary
 ```
 
-Drift simulation:
+Local drift simulation:
 
 ```bash
-python scripts/simulate_drift.py
-```
-
-For deployed drift simulation:
-
-```bash
-export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
+unset CASE9_BASE_URL
 python scripts/simulate_drift.py
 ```
 
@@ -181,7 +216,6 @@ pytest
 
 ## What's Not Done
 
-- Live deployment URL is still pending.
 - This is not a full model registry. The promotion gate is a transparent CI stub for the case study.
 - The default Render deployment uses fallback mode for reliability. The optional Hugging Face layer can be enabled with `INSTALL_HF=true`.
 
