@@ -1,7 +1,7 @@
 # Case 9: Model Serving Lite
 
-**Live API:** coming soon
-**Repo:** coming soon
+**Live API:** https://case9-model-serving-lite.onrender.com
+**Repo:** https://github.com/manish6263/case9-model-serving-lite
 **Demo video:** coming soon
 
 Turn a pretrained sentiment model into a small production-minded ML service with API, logging, drift checks, containerization, CI, and a demo that proves we can detect failure before users complain.
@@ -123,7 +123,7 @@ python scripts/demo_requests.py
 For a deployed API:
 
 ```bash
-set CASE9_BASE_URL=https://your-render-service.onrender.com
+set CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
 python scripts/demo_requests.py
 ```
 
