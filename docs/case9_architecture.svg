@@ -42,16 +42,16 @@
 
   <rect x="940" y="220" width="205" height="90" class="box3"/>
   <text x="1042" y="253" text-anchor="middle" class="text">Prediction log</text>
-  <text x="1042" y="282" text-anchor="middle" class="subtext">request id, hash, latency</text>
+  <text x="1042" y="282" text-anchor="middle" class="subtext">req id, hash, latency</text>
 
-  <rect x="1185" y="220" width="120" height="90" class="box3"/>
-  <text x="1245" y="253" text-anchor="middle" class="text">Monitor</text>
-  <text x="1245" y="282" text-anchor="middle" class="subtext">drift summary</text>
+  <rect x="1210" y="220" width="120" height="90" class="box3"/>
+  <text x="1270" y="253" text-anchor="middle" class="text">Monitor</text>
+  <text x="1270" y="282" text-anchor="middle" class="subtext">drift summary</text>
 
   <path d="M 285 265 L 350 265" class="arrow"/>
   <path d="M 570 265 L 635 265" class="arrow"/>
   <path d="M 865 265 L 930 265" class="arrow"/>
-  <path d="M 1145 265 L 1175 265" class="arrow"/>
+  <path d="M 1160 265 L 1200 265" class="arrow"/>
 
   <rect x="60" y="430" width="1280" height="240" class="lane" rx="18"/>
   <text x="90" y="470" class="laneTitle">Offline retraining and promotion path</text>
