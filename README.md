@@ -26,7 +26,8 @@ The product scenario is simple: a notebook sentiment model needs to become a ser
 
 ```bash
 python -m venv .venv
-.venv\Scripts\activate
+# .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
@@ -115,6 +116,13 @@ Drift simulation:
 python scripts/simulate_drift.py
 ```
 
+For deployed drift simulation:
+
+```bash
+export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
+python scripts/simulate_drift.py
+```
+
 Demo request sequence:
 
 ```bash
@@ -124,7 +132,7 @@ python scripts/demo_requests.py
 For a deployed API:
 
 ```bash
-set CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
+export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
 python scripts/demo_requests.py
 ```
 

@@ -1,4 +1,5 @@
 import os
+import sys
 
 import httpx
 
@@ -12,8 +13,8 @@ NORMAL_TEXTS = [
 ]
 
 DRIFT_TEXTS = [
-    "बहुत खराब अनुभव zyxqv frobnicate splarn unknownterm",
-    "यह service totally अलग और confusing zyxqv splarn",
+    "bahut kharab anubhav zyxqv frobnicate splarn unknownterm",
+    "yeh service totally alag aur confusing zyxqv splarn",
     "Necesito ayuda con una orden rara blorptastic qwertonium",
 ]
 
@@ -25,12 +26,18 @@ def post_prediction(text: str) -> None:
 
 
 def main() -> None:
-    for text in NORMAL_TEXTS + DRIFT_TEXTS:
-        post_prediction(text)
+    try:
+        for text in NORMAL_TEXTS + DRIFT_TEXTS:
+            post_prediction(text)
 
-    summary = httpx.get(f"{BASE_URL}/monitoring/summary", timeout=10)
-    summary.raise_for_status()
-    print(summary.json())
+        summary = httpx.get(f"{BASE_URL}/monitoring/summary", timeout=10)
+        summary.raise_for_status()
+        print(summary.json())
+    except httpx.ConnectError:
+        print(f"Could not connect to {BASE_URL}.")
+        print("Start the local API with `uvicorn app.main:app --reload`,")
+        print("or set CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
