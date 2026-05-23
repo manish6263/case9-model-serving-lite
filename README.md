@@ -1,6 +1,7 @@
 # Case 9: Model Serving Lite
 
-**Live API:** https://case9-model-serving-lite.onrender.com
+**Live API docs:** https://case9-model-serving-lite.onrender.com/docs
+**Base API URL:** https://case9-model-serving-lite.onrender.com
 **Repo:** https://github.com/manish6263/case9-model-serving-lite
 **Demo video:** coming soon
 
