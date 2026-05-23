@@ -10,3 +10,15 @@ def test_health_returns_ok() -> None:
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
+
+def test_root_returns_service_info() -> None:
+    client = TestClient(app)
+
+    response = client.get("/")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["service"] == "Case 9 Model Serving Lite"
+    assert body["docs_url"] == "/docs"
+    assert body["endpoints"]["predict"] == "POST /predict"

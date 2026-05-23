@@ -31,3 +31,10 @@ class DriftSummary(BaseModel):
     status: Literal["healthy", "drift_detected", "insufficient_data"]
     flags: list[str]
     metrics: dict
+
+
+class ServiceInfo(BaseModel):
+    service: str
+    status: str
+    docs_url: str
+    endpoints: dict[str, str]

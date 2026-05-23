@@ -8,7 +8,13 @@ from app.config import get_log_path
 from app.drift import summarize_drift
 from app.logging_store import fetch_recent_logs, initialize_log_store, log_prediction
 from app.model import get_model_version, predict_sentiment
-from app.schemas import DriftSummary, PredictRequest, PredictResponse, PredictionLogEntry
+from app.schemas import (
+    DriftSummary,
+    PredictRequest,
+    PredictResponse,
+    PredictionLogEntry,
+    ServiceInfo,
+)
 
 
 @asynccontextmanager
@@ -23,6 +29,21 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+
+@app.get("/", response_model=ServiceInfo)
+def service_info() -> ServiceInfo:
+    return ServiceInfo(
+        service="Case 9 Model Serving Lite",
+        status="ok",
+        docs_url="/docs",
+        endpoints={
+            "health": "GET /health",
+            "predict": "POST /predict",
+            "recent_logs": "GET /logs/recent",
+            "monitoring_summary": "GET /monitoring/summary",
+        },
+    )
 
 
 @app.get("/health")

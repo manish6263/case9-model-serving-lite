@@ -15,6 +15,7 @@ The product scenario is simple: a notebook sentiment model needs to become a ser
 ## What Works
 
 - `GET /health`: service readiness.
+- `GET /`: browser-friendly service info and endpoint list.
 - `POST /predict`: sentiment prediction with request id, label, score, model version, and latency.
 - `GET /logs/recent`: privacy-aware request/response logs.
 - `GET /monitoring/summary`: drift-monitoring summary.
