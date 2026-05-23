@@ -56,18 +56,26 @@ Monitoring summary:
 curl https://case9-model-serving-lite.onrender.com/monitoring/summary
 ```
 
-Deployed drift simulation:
+To run the deployed drift simulation, first clone the repo because the script lives in the source repository:
 
 ```bash
+git clone https://github.com/manish6263/case9-model-serving-lite.git
+cd case9-model-serving-lite
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
 python scripts/simulate_drift.py
 ```
 
 ## How To Run Locally
 
+Clone and start the API:
+
 ```bash
+git clone https://github.com/manish6263/case9-model-serving-lite.git
+cd case9-model-serving-lite
 python -m venv .venv
-# .venv\Scripts\activate
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload
@@ -75,11 +83,21 @@ uvicorn app.main:app --reload
 
 Open `http://localhost:8000/docs`.
 
+On Windows PowerShell, activate the environment with:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
 For Render deployment, this repo includes `render.yaml`. The default deployment uses `CASE9_DISABLE_HF=1` so the free-tier container starts quickly and reliably; the model version in each response makes that degraded/fallback mode explicit.
 
 ## How To Run With Docker
 
+From the cloned repo root:
+
 ```bash
+git clone https://github.com/manish6263/case9-model-serving-lite.git
+cd case9-model-serving-lite
 docker build -t case9-model-serving-lite .
 docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite
 ```
@@ -93,14 +111,14 @@ docker run -p 8000:8000 case9-model-serving-lite:hf
 
 By default, prediction logs are written to `logs/predictions.jsonl`. To override this path:
 
-```bash
-set CASE9_LOG_PATH=artifacts\local-predictions.jsonl
+```powershell
+$env:CASE9_LOG_PATH="artifacts\local-predictions.jsonl"
 ```
 
 To force the deterministic fallback model during local debugging or tests:
 
-```bash
-set CASE9_DISABLE_HF=1
+```powershell
+$env:CASE9_DISABLE_HF="1"
 ```
 
 To install the optional Hugging Face dependencies locally:
@@ -190,6 +208,11 @@ python training/promote_if_better.py
 ## How To Test
 
 ```bash
+git clone https://github.com/manish6263/case9-model-serving-lite.git
+cd case9-model-serving-lite
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 pytest
 ```
 
