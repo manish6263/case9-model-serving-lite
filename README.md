@@ -99,7 +99,7 @@ On Windows PowerShell, activate the environment with:
 .\.venv\Scripts\Activate.ps1
 ```
 
-For Render deployment, this repo includes `render.yaml`. The live container now installs the Hugging Face dependencies and attempts to serve `distilbert-base-uncased-finetuned-sst-2-english`; if the free-tier host cannot load the model, the service falls back explicitly and the `model_version` field shows that degraded mode.
+For Render deployment, this repo includes `render.yaml`. Render free tier has a 512 MB memory limit, so the live service runs the explicit fallback mode for reliability. The code still supports `distilbert-base-uncased-finetuned-sst-2-english`; enable it on a larger host or local Docker image with `INSTALL_HF=true` and without `CASE9_DISABLE_HF=1`.
 
 ## How To Run With Docker
 
@@ -109,20 +109,20 @@ From the cloned repo root:
 git clone https://github.com/manish6263/case9-model-serving-lite.git
 cd case9-model-serving-lite
 docker build -t case9-model-serving-lite .
-docker run -p 8000:8000 case9-model-serving-lite
-```
-
-The default image installs Hugging Face dependencies and attempts DistilBERT. To force the deterministic fallback during local debugging or on a constrained machine:
-
-```bash
 docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite
 ```
 
-To build a lighter fallback-only image:
+The default image uses the deterministic fallback so it can run on small free-tier containers. To build an image that installs Hugging Face dependencies and attempts DistilBERT:
 
 ```bash
-docker build --build-arg INSTALL_HF=false -t case9-model-serving-lite:fallback .
-docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite:fallback
+docker build --build-arg INSTALL_HF=true -t case9-model-serving-lite:hf .
+docker run -p 8000:8000 case9-model-serving-lite:hf
+```
+
+To force fallback even in the Hugging Face image:
+
+```bash
+docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite:hf
 ```
 
 By default, prediction logs are written to `logs/predictions.jsonl`. To override this path:
@@ -256,7 +256,7 @@ pytest
 ## What's Not Done
 
 - This is not a full model registry. The promotion gate is a transparent CI stub for the case study.
-- Render free tier may still fall back if DistilBERT cannot be loaded within the available resources; that degraded mode is visible in every prediction response.
+- Render free tier runs fallback mode because PyTorch plus DistilBERT exceeds the 512 MB memory limit. The DistilBERT path is implemented and can be enabled on local Docker or a larger ML-friendly host.
 
 ## In Production, I Would Also Add
 
