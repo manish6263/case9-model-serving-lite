@@ -1,3 +1,13 @@
+---
+title: Case 9 Model Serving Lite
+emoji: 🚀
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 8000
+pinned: false
+---
+
 # Case 9: Model Serving Lite
 
 **Live API docs:** https://case9-model-serving-lite.onrender.com/docs
@@ -109,20 +119,20 @@ From the cloned repo root:
 git clone https://github.com/manish6263/case9-model-serving-lite.git
 cd case9-model-serving-lite
 docker build -t case9-model-serving-lite .
+docker run -p 8000:8000 case9-model-serving-lite
+```
+
+This Hugging Face Space branch installs Hugging Face dependencies by default and attempts DistilBERT. To force fallback even in this image:
+
+```bash
 docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite
 ```
 
-The default image uses the deterministic fallback so it can run on small free-tier containers. To build an image that installs Hugging Face dependencies and attempts DistilBERT:
+To build a lighter fallback-only image:
 
 ```bash
-docker build --build-arg INSTALL_HF=true -t case9-model-serving-lite:hf .
-docker run -p 8000:8000 case9-model-serving-lite:hf
-```
-
-To force fallback even in the Hugging Face image:
-
-```bash
-docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite:hf
+docker build --build-arg INSTALL_HF=false -t case9-model-serving-lite:fallback .
+docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite:fallback
 ```
 
 By default, prediction logs are written to `logs/predictions.jsonl`. To override this path:
