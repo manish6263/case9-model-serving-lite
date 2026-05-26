@@ -19,6 +19,7 @@ The product scenario is simple: a notebook sentiment model needs to become a ser
 
 - `GET /health`: service readiness.
 - `GET /`: browser-friendly service info and endpoint list.
+- `GET /model/status`: shows whether the live service is using DistilBERT or fallback mode.
 - `POST /predict`: sentiment prediction with request id, label, score, model version, and latency.
 - `GET /logs/recent`: privacy-aware request/response logs.
 - `GET /monitoring/summary`: drift-monitoring summary.
@@ -37,6 +38,12 @@ Health check:
 
 ```bash
 curl https://case9-model-serving-lite.onrender.com/health
+```
+
+Model status:
+
+```bash
+curl https://case9-model-serving-lite.onrender.com/model/status
 ```
 
 Prediction:

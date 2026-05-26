@@ -7,7 +7,7 @@ from fastapi import FastAPI
 from app.config import get_log_path
 from app.drift import summarize_drift
 from app.logging_store import fetch_recent_logs, initialize_log_store, log_prediction
-from app.model import get_model_version, predict_sentiment
+from app.model import get_model_status, get_model_version, predict_sentiment
 from app.schemas import (
     DriftSummary,
     PredictRequest,
@@ -39,6 +39,7 @@ def service_info() -> ServiceInfo:
         docs_url="/docs",
         endpoints={
             "health": "GET /health",
+            "model_status": "GET /model/status",
             "predict": "POST /predict",
             "recent_logs": "GET /logs/recent",
             "monitoring_summary": "GET /monitoring/summary",
@@ -49,6 +50,11 @@ def service_info() -> ServiceInfo:
 @app.get("/health")
 def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/model/status")
+def model_status() -> dict[str, object]:
+    return get_model_status()
 
 
 @app.post("/predict", response_model=PredictResponse)

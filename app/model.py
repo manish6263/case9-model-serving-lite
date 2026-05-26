@@ -6,6 +6,8 @@ from typing import Any
 
 HF_MODEL_NAME = "distilbert-base-uncased-finetuned-sst-2-english"
 FALLBACK_MODEL_VERSION = "rule-based-fallback-v0"
+_MODEL_LOAD_ERROR: str | None = None
+_MODEL_BACKEND: str = "not_loaded"
 
 POSITIVE_WORDS = {
     "amazing",
@@ -49,14 +51,23 @@ def predict_with_rule_based_fallback(text: str) -> tuple[str, float]:
 
 @lru_cache(maxsize=1)
 def get_huggingface_pipeline() -> Any | None:
+    global _MODEL_BACKEND, _MODEL_LOAD_ERROR
+
     if os.getenv("CASE9_DISABLE_HF", "").lower() in {"1", "true", "yes"}:
+        _MODEL_BACKEND = "fallback"
+        _MODEL_LOAD_ERROR = "CASE9_DISABLE_HF is enabled"
         return None
 
     try:
         from transformers import pipeline
 
-        return pipeline("sentiment-analysis", model=HF_MODEL_NAME)
-    except Exception:
+        classifier = pipeline("sentiment-analysis", model=HF_MODEL_NAME)
+        _MODEL_BACKEND = "huggingface"
+        _MODEL_LOAD_ERROR = None
+        return classifier
+    except Exception as exc:
+        _MODEL_BACKEND = "fallback"
+        _MODEL_LOAD_ERROR = f"{type(exc).__name__}: {exc}"
         return None
 
 
@@ -64,6 +75,18 @@ def get_model_version() -> str:
     if get_huggingface_pipeline() is None:
         return FALLBACK_MODEL_VERSION
     return f"{HF_MODEL_NAME}-v1"
+
+
+def get_model_status() -> dict[str, object]:
+    get_huggingface_pipeline()
+    return {
+        "backend": _MODEL_BACKEND,
+        "model_version": get_model_version(),
+        "hf_model_name": HF_MODEL_NAME,
+        "hf_disabled": os.getenv("CASE9_DISABLE_HF", "").lower()
+        in {"1", "true", "yes"},
+        "load_error": _MODEL_LOAD_ERROR,
+    }
 
 
 def predict_sentiment(text: str) -> tuple[str, float]:
