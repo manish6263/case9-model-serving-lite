@@ -92,7 +92,7 @@ On Windows PowerShell, activate the environment with:
 .\.venv\Scripts\Activate.ps1
 ```
 
-For Render deployment, this repo includes `render.yaml`. The default deployment uses `CASE9_DISABLE_HF=1` so the free-tier container starts quickly and reliably; the model version in each response makes that degraded/fallback mode explicit.
+For Render deployment, this repo includes `render.yaml`. The live container now installs the Hugging Face dependencies and attempts to serve `distilbert-base-uncased-finetuned-sst-2-english`; if the free-tier host cannot load the model, the service falls back explicitly and the `model_version` field shows that degraded mode.
 
 ## How To Run With Docker
 
@@ -102,14 +102,20 @@ From the cloned repo root:
 git clone https://github.com/manish6263/case9-model-serving-lite.git
 cd case9-model-serving-lite
 docker build -t case9-model-serving-lite .
+docker run -p 8000:8000 case9-model-serving-lite
+```
+
+The default image installs Hugging Face dependencies and attempts DistilBERT. To force the deterministic fallback during local debugging or on a constrained machine:
+
+```bash
 docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite
 ```
 
-The default image uses the deterministic fallback so the container stays small and quick to deploy. To build an image that installs Hugging Face dependencies:
+To build a lighter fallback-only image:
 
 ```bash
-docker build --build-arg INSTALL_HF=true -t case9-model-serving-lite:hf .
-docker run -p 8000:8000 case9-model-serving-lite:hf
+docker build --build-arg INSTALL_HF=false -t case9-model-serving-lite:fallback .
+docker run -p 8000:8000 -e CASE9_DISABLE_HF=1 case9-model-serving-lite:fallback
 ```
 
 By default, prediction logs are written to `logs/predictions.jsonl`. To override this path:
@@ -243,7 +249,7 @@ pytest
 ## What's Not Done
 
 - This is not a full model registry. The promotion gate is a transparent CI stub for the case study.
-- The default Render deployment uses fallback mode for reliability. The optional Hugging Face layer can be enabled with `INSTALL_HF=true`.
+- Render free tier may still fall back if DistilBERT cannot be loaded within the available resources; that degraded mode is visible in every prediction response.
 
 ## In Production, I Would Also Add
 
