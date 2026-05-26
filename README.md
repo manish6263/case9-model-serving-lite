@@ -10,8 +10,9 @@ pinned: false
 
 # Case 9: Model Serving Lite
 
-**Live API docs:** https://case9-model-serving-lite.onrender.com/docs
-**Base API URL:** https://case9-model-serving-lite.onrender.com
+**Live API docs:** https://mp626329-case9-model-serving-lite.hf.space/docs
+**Base API URL:** https://mp626329-case9-model-serving-lite.hf.space
+**Fallback Render URL:** https://case9-model-serving-lite.onrender.com
 **Repo:** https://github.com/manish6263/case9-model-serving-lite
 **Demo video:** coming soon
 
@@ -34,32 +35,32 @@ The product scenario is simple: a notebook sentiment model needs to become a ser
 - `GET /logs/recent`: privacy-aware request/response logs.
 - `GET /monitoring/summary`: drift-monitoring summary.
 - Retrain/evaluation gate: trains a candidate model, evaluates held-out F1, and rejects regressions.
-- Docker image and Render blueprint for deployment.
+- Docker image, Hugging Face Space deployment, and Render fallback blueprint.
 
 ## Review The Live API
 
 Open the interactive API docs:
 
 ```text
-https://case9-model-serving-lite.onrender.com/docs
+https://mp626329-case9-model-serving-lite.hf.space/docs
 ```
 
 Health check:
 
 ```bash
-curl https://case9-model-serving-lite.onrender.com/health
+curl https://mp626329-case9-model-serving-lite.hf.space/health
 ```
 
 Model status:
 
 ```bash
-curl https://case9-model-serving-lite.onrender.com/model/status
+curl https://mp626329-case9-model-serving-lite.hf.space/model/status
 ```
 
 Prediction:
 
 ```bash
-curl -X POST https://case9-model-serving-lite.onrender.com/predict \
+curl -X POST https://mp626329-case9-model-serving-lite.hf.space/predict \
   -H "Content-Type: application/json" \
   -d '{"text":"I loved this excellent product"}'
 ```
@@ -67,13 +68,13 @@ curl -X POST https://case9-model-serving-lite.onrender.com/predict \
 Recent prediction logs:
 
 ```bash
-curl https://case9-model-serving-lite.onrender.com/logs/recent
+curl https://mp626329-case9-model-serving-lite.hf.space/logs/recent
 ```
 
 Monitoring summary:
 
 ```bash
-curl https://case9-model-serving-lite.onrender.com/monitoring/summary
+curl https://mp626329-case9-model-serving-lite.hf.space/monitoring/summary
 ```
 
 To run the deployed drift simulation, first clone the repo because the script lives in the source repository:
@@ -84,7 +85,7 @@ cd case9-model-serving-lite
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
+export CASE9_BASE_URL=https://mp626329-case9-model-serving-lite.hf.space
 python scripts/simulate_drift.py
 ```
 
@@ -211,7 +212,7 @@ python scripts/demo_requests.py
 For a deployed API:
 
 ```bash
-export CASE9_BASE_URL=https://case9-model-serving-lite.onrender.com
+export CASE9_BASE_URL=https://mp626329-case9-model-serving-lite.hf.space
 python scripts/demo_requests.py
 ```
 
@@ -258,8 +259,9 @@ pytest
 - Drift checks: text length, label distribution, language/script ratio, and vocabulary novelty.
 - pytest: contract tests for the service.
 - A deterministic fallback model keeps the service usable if model loading fails on a free-tier host.
-- Docker: containerized API for Render or any container host.
-- Render blueprint: `render.yaml` for free-tier API deployment.
+- Docker: containerized API for Hugging Face Spaces, Render, or any container host.
+- Hugging Face Spaces: primary live deployment for the DistilBERT-backed API.
+- Render blueprint: `render.yaml` for free-tier fallback API deployment.
 - GitHub Actions: tests and Docker build run on push and pull request.
 - Training gate: retrains a lightweight candidate model, evaluates held-out F1, and rejects metric regression.
 
