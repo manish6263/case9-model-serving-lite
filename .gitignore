@@ -228,3 +228,6 @@ models/
 reports/
 training/candidate_model.json
 training/candidate_metrics.json
+
+docs/case9_architecture.svg
+CASE9_DECK.md
